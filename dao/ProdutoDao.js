@@ -6,9 +6,13 @@ class ProdutoDao {
 
   lista(callback){
     this.connection.query('SELECT * FROM livros', callback)
-    this.end()
+    this.connection.end()
   }
 
+  insere(livro, callback){
+    this.connection.query('INSERT INTO livros SET ?', livro, callback)
+    this.connection.end()
+  }
 }
 
 module.exports = ProdutoDao
