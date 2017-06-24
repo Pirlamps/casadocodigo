@@ -1,6 +1,18 @@
 <% include ../includes/header.ejs %>
 
 <div>
+
+    <% if(locals.errors){ %>
+    <ul class="list-unstyle container">
+    <%errors.forEach((error, index) => { %>
+      <li class="alert alert-danger">
+        <%= errors[index].msg%>
+      </li>
+    <% }) %>
+    </ul>
+    <% } %>
+
+
     <div class ="container min-container">
         <h2 class="basic-title">Add</h2>
 

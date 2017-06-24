@@ -9,7 +9,13 @@ function prodRoutes(app) {
       if(err){
         res.render('errors/503', {err})
       }
-      res.render('produtos/lista', {result})
+
+      res.format({
+        html: () => {res.render('produtos/lista', {result})},
+        json: () => {res.json(result)}
+      })
+
+
     })
   })
 
@@ -18,16 +24,35 @@ function prodRoutes(app) {
   })
 
   app.post('/produtos', (req,res) => {
+
+    req.assert('titulo', 'Título deve ser preenchido.').notEmpty()
+    req.assert('preco', 'Preço deve ser um número.').isFloat()
+    req.assert('preco', 'Preço deve ser um número.').notEmpty()
+
+    const errors = req.validationErrors()
+
+    if (errors ){
+
+      res.format({
+        html: () => {res.status(400).render('produtos/form', {errors})},
+        json: () => {es.status(400).json(errors)}
+      })
+      // res.render('produtos/form', {errors})
+      return
+    }
+
     const livro = req.body
     const connection = connectionFactory()
     const produtoDao = new ProdutoDao(connection)
+
 
     produtoDao.insere(livro, (err,result,fields) => {
       if(err){
         res.render('errors/503', {err})
       } else {
-      res.redirect('/produtos')
-      }
+        res.redirect('/produtos')
+      }          res.status(400).render('produtos/form', {errors})
+
     })
 
 
