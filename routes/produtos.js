@@ -1,18 +1,16 @@
-const connectionFactory = require('../infra/connectionFactory')
 const ProdutoDao = require('../dao/ProdutoDao')
 
 function prodRoutes(app) {
   app.get('/produtos', (req, res) => {
-    const connection = connectionFactory()
-    const produtoDao = new ProdutoDao(connection)
+    const produtoDao = new ProdutoDao()
     produtoDao.lista((err,result,fields) => {
       if(err){
         res.render('errors/503', {err})
       }
 
       res.format({
-        html: () => {res.render('produtos/lista', {result})},
-        json: () => {res.json(result)}
+        html: () => {res.status(200).render('produtos/lista', {result})},
+        json: () => {res.status(200).json(result)}
       })
 
 
@@ -42,8 +40,8 @@ function prodRoutes(app) {
     }
 
     const livro = req.body
-    const connection = connectionFactory()
-    const produtoDao = new ProdutoDao(connection)
+
+    const produtoDao = new ProdutoDao()
 
 
     produtoDao.insere(livro, (err,result,fields) => {

@@ -1,6 +1,9 @@
+const connectionFactory = require('../infra/connectionFactory')
+
 class ProdutoDao {
 
-  constructor (connection) {
+  constructor () {
+    const connection = connectionFactory()
     this.connection = connection
   }
 
